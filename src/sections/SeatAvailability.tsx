@@ -1,143 +1,122 @@
 import { useState, useEffect } from "react";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 
-function Counter({ from, to }: { from: number; to: number }) {
-  const count = useMotionValue(from);
-  const rounded = useTransform(count, (latest) => Math.round(latest));
-  
+function Counter({ to }: { to: number }) {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (v) => Math.round(v));
   useEffect(() => {
-    const controls = animate(count, to, { duration: 2, ease: "easeOut" });
-    return controls.stop;
+    const c = animate(count, to, { duration: 2, ease: "easeOut" });
+    return c.stop;
   }, [count, to]);
-
   return <motion.span>{rounded}</motion.span>;
 }
 
 export default function SeatAvailability() {
-  // In a real implementation, you would fetch from Google Sheets CSV:
-  // const SHEET_URL = "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/export?format=csv&gid=0";
-  // Replace YOUR_SHEET_ID with actual ID
-  
-  const [data, setData] = useState({
-    total: 120,
-    occupied: 84,
-    available: 36,
-    lastUpdated: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  });
+  const [data] = useState({ total: 120, occupied: 84, available: 36 });
+  const [time, setTime] = useState(() =>
+    new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+  );
 
-  const percentage = (data.occupied / data.total) * 100;
-  
-  // Color coding
-  let statusColor = "#22c55e"; // Green (< 50%)
-  if (percentage >= 80) statusColor = "#ef4444"; // Red (> 80%)
-  else if (percentage >= 50) statusColor = "#eab308"; // Yellow (50-80%)
+  useEffect(() => {
+    const t = setInterval(() => {
+      setTime(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
+    }, 60000);
+    return () => clearInterval(t);
+  }, []);
 
-  const circleRadius = 120;
-  const circleCircumference = 2 * Math.PI * circleRadius;
-  const strokeDashoffset = circleCircumference - (percentage / 100) * circleCircumference;
+  const pct = (data.occupied / data.total) * 100;
+  const r = 110;
+  const circ = 2 * Math.PI * r;
+  const offset = circ - (pct / 100) * circ;
+
+  const statusColor = pct >= 80 ? "#ef4444" : pct >= 50 ? "#eab308" : "#22c55e";
+  const statusLabel = pct >= 80 ? "Almost Full" : pct >= 50 ? "Filling Up" : "Plenty Available";
 
   return (
-    <section id="seats" className="py-24 bg-background/50 relative border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <motion.h2 
+    <section id="seats" className="py-20 sm:py-28 relative border-t border-white/5" style={{ backgroundColor: "hsl(222 47% 7%)" }}>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-14">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold text-white mb-4"
+            transition={{ duration: 0.5 }}
           >
-            Live Seat Availability
-          </motion.h2>
-          <p className="text-muted-foreground">Auto-updates from our front desk.</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              Live Seat Availability
+            </h2>
+            <p className="text-white/50 text-base sm:text-lg">
+              Updated in real-time from our front desk.
+            </p>
+          </motion.div>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-16">
-          {/* Circular Progress */}
-          <motion.div 
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-16">
+          {/* Ring */}
+          <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             whileInView={{ scale: 1, opacity: 1 }}
             viewport={{ once: true }}
-            className="relative w-[300px] h-[300px] flex items-center justify-center"
+            transition={{ duration: 0.6 }}
+            className="relative w-64 h-64 sm:w-72 sm:h-72 flex items-center justify-center shrink-0"
           >
-            <svg className="w-full h-full transform -rotate-90">
-              {/* Background circle */}
-              <circle
-                cx="150"
-                cy="150"
-                r={circleRadius}
-                fill="none"
-                stroke="rgba(255,255,255,0.05)"
-                strokeWidth="24"
-              />
-              {/* Progress circle */}
+            <svg className="w-full h-full -rotate-90" viewBox="0 0 260 260">
+              <circle cx="130" cy="130" r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="20" />
               <motion.circle
-                initial={{ strokeDashoffset: circleCircumference }}
-                whileInView={{ strokeDashoffset }}
-                transition={{ duration: 2, ease: "easeOut" }}
-                viewport={{ once: true }}
-                cx="150"
-                cy="150"
-                r={circleRadius}
+                cx="130" cy="130" r={r}
                 fill="none"
                 stroke={statusColor}
-                strokeWidth="24"
+                strokeWidth="20"
                 strokeLinecap="round"
+                initial={{ strokeDashoffset: circ }}
+                whileInView={{ strokeDashoffset: offset }}
+                viewport={{ once: true }}
+                transition={{ duration: 2, ease: "easeOut" }}
                 style={{
-                  strokeDasharray: circleCircumference,
-                  filter: `drop-shadow(0 0 12px ${statusColor}66)`
+                  strokeDasharray: circ,
+                  filter: `drop-shadow(0 0 10px ${statusColor}88)`,
                 }}
               />
             </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-5xl font-bold text-white tracking-tighter">
-                {Math.round(percentage)}%
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span className="text-5xl font-bold text-white tracking-tight">{Math.round(pct)}%</span>
+              <span className="text-xs text-white/40 uppercase tracking-widest mt-1">Occupied</span>
+              <span className="text-xs font-medium mt-2 px-3 py-1 rounded-full" style={{ color: statusColor, backgroundColor: `${statusColor}22` }}>
+                {statusLabel}
               </span>
-              <span className="text-sm text-muted-foreground uppercase tracking-wider mt-1">Occupied</span>
             </div>
           </motion.div>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full lg:w-auto">
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="p-6 rounded-2xl bg-card border border-white/10 flex flex-col items-center justify-center min-w-[160px]"
-            >
-              <span className="text-muted-foreground text-sm uppercase tracking-wider mb-2">Total</span>
-              <span className="text-4xl font-bold text-white"><Counter from={0} to={data.total} /></span>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 }}
-              viewport={{ once: true }}
-              className="p-6 rounded-2xl bg-card border border-white/10 flex flex-col items-center justify-center"
-            >
-              <span className="text-muted-foreground text-sm uppercase tracking-wider mb-2">Occupied</span>
-              <span className="text-4xl font-bold text-white"><Counter from={0} to={data.occupied} /></span>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              viewport={{ once: true }}
-              className="p-6 rounded-2xl bg-primary/10 border border-primary/30 flex flex-col items-center justify-center relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-primary/5 blur-xl" />
-              <span className="text-primary text-sm uppercase tracking-wider mb-2 relative z-10">Available</span>
-              <span className="text-4xl font-bold text-white drop-shadow-[0_0_12px_rgba(59,130,246,0.5)] relative z-10">
-                <Counter from={0} to={data.available} />
-              </span>
-            </motion.div>
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-4 w-full lg:w-auto lg:grid-cols-1 lg:gap-4">
+            {[
+              { label: "Total Seats", value: data.total, color: "text-white", accent: false },
+              { label: "Occupied", value: data.occupied, color: "text-white", accent: false },
+              { label: "Available", value: data.available, color: "text-primary", accent: true },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="p-4 sm:p-6 rounded-2xl border flex flex-col items-center lg:items-start lg:flex-row lg:items-center lg:gap-6 min-w-0 lg:min-w-[240px]"
+                style={{
+                  backgroundColor: stat.accent ? "hsl(217 91% 60% / 0.08)" : "hsl(222 47% 11%)",
+                  borderColor: stat.accent ? "hsl(217 91% 60% / 0.3)" : "hsl(222 47% 18% / 0.8)",
+                }}
+              >
+                <span className={`text-3xl sm:text-4xl font-bold tracking-tight ${stat.color}`}>
+                  <Counter to={stat.value} />
+                </span>
+                <span className="text-xs sm:text-sm text-white/40 uppercase tracking-wider mt-1 lg:mt-0">{stat.label}</span>
+              </motion.div>
+            ))}
           </div>
         </div>
-        
-        <div className="mt-12 text-center text-sm text-muted-foreground">
-          Last updated: {data.lastUpdated}
-        </div>
+
+        <p className="text-center text-xs text-white/30 mt-10">Last updated: {time}</p>
       </div>
     </section>
   );
