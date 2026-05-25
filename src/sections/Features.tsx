@@ -2,64 +2,72 @@ import { motion } from "framer-motion";
 import { Wind, Wifi, VolumeX, Zap, Shield, Armchair, Droplets, Battery } from "lucide-react";
 
 const features = [
-  { icon: Wind, title: "AC Study Hall", desc: "Climate-controlled environment for optimal focus" },
-  { icon: Wifi, title: "High-Speed WiFi", desc: "Seamless 5G connectivity for online classes" },
-  { icon: VolumeX, title: "Silent Environment", desc: "Strictly enforced zero-noise policy" },
-  { icon: Zap, title: "Charging Ports", desc: "Individual power sockets at every desk" },
-  { icon: Shield, title: "CCTV Security", desc: "24/7 surveillance for your safety" },
-  { icon: Armchair, title: "Comfortable Seating", desc: "Ergonomic chairs for long study sessions" },
-  { icon: Droplets, title: "Drinking Water", desc: "RO purified hot and cold water dispenser" },
-  { icon: Battery, title: "Power Backup", desc: "Uninterrupted power supply with inverter" },
+  { icon: Wind,      title: "AC Study Hall",       desc: "Climate-controlled for optimal focus all day" },
+  { icon: Wifi,      title: "High-Speed WiFi",     desc: "Blazing fast internet for online classes & research" },
+  { icon: VolumeX,   title: "Silent Zone",         desc: "Strictly enforced zero-noise policy inside" },
+  { icon: Zap,       title: "Charging Ports",      desc: "Individual power sockets at every single desk" },
+  { icon: Shield,    title: "CCTV Security",       desc: "24/7 surveillance for your peace of mind" },
+  { icon: Armchair,  title: "Ergonomic Seating",   desc: "Premium chairs built for long study sessions" },
+  { icon: Droplets,  title: "RO Drinking Water",   desc: "Hot and cold purified water dispenser, free" },
+  { icon: Battery,   title: "Power Backup",        desc: "Uninterrupted power — inverter always on" },
 ];
 
-const containerVariants = {
+const container = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
+  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+const item = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
 export default function Features() {
   return (
-    <section id="features" className="py-24 bg-background relative z-10 border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <motion.h2 
+    <section id="features" className="py-20 sm:py-28 relative border-t border-white/5" style={{ backgroundColor: "hsl(222 47% 7%)" }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="text-center mb-14">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="text-3xl md:text-4xl font-bold text-white mb-4 inline-block relative"
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5 }}
           >
-            World-Class Facilities
-            <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent" />
-          </motion.h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 inline-block relative">
+              World-Class Facilities
+              <div className="absolute -bottom-2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent" />
+            </h2>
+            <p className="text-white/50 mt-6 text-base sm:text-lg">
+              Everything you need to study smarter, longer, and better.
+            </p>
+          </motion.div>
         </div>
 
-        <motion.div 
-          variants={containerVariants}
+        {/* Grid */}
+        <motion.div
+          variants={container}
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
         >
-          {features.map((feature, idx) => (
-            <motion.div 
+          {features.map((f, idx) => (
+            <motion.div
               key={idx}
-              variants={itemVariants}
-              whileHover={{ scale: 1.03 }}
-              className="p-6 rounded-2xl bg-card/50 backdrop-blur border border-white/10 hover:border-primary/50 transition-colors group"
+              variants={item}
+              whileHover={{ scale: 1.03, transition: { duration: 0.2 } }}
+              className="p-5 sm:p-6 rounded-2xl border border-white/10 hover:border-primary/40 transition-colors group cursor-default"
+              style={{ backgroundColor: "hsl(222 47% 11% / 0.6)", backdropFilter: "blur(8px)" }}
             >
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                <feature.icon className="w-6 h-6 text-primary group-hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] transition-all" />
+              <div
+                className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 transition-colors group-hover:bg-primary/20"
+                style={{ backgroundColor: "hsl(217 91% 60% / 0.12)" }}
+              >
+                <f.icon className="w-5 h-5 text-primary" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">{feature.title}</h3>
-              <p className="text-sm text-muted-foreground">{feature.desc}</p>
+              <h3 className="text-base font-semibold text-white mb-1.5">{f.title}</h3>
+              <p className="text-sm text-white/50 leading-relaxed">{f.desc}</p>
             </motion.div>
           ))}
         </motion.div>
