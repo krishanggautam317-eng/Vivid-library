@@ -1,93 +1,128 @@
 import { motion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ArrowRight } from "lucide-react";
+
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
+});
 
 export default function Hero() {
-  const words = ["Your", "Premium", "Study", "Space", "in", "Bilaspur"];
-
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16" style={{ backgroundColor: "hsl(222 47% 7%)" }}>
-      {/* Background glow */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full"
-          style={{
-            background: "radial-gradient(circle, hsl(217 91% 60% / 0.15) 0%, transparent 70%)",
-            filter: "blur(40px)",
-          }}
-        />
-        {/* Grid lines */}
-        <div
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage: "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)",
-            backgroundSize: "64px 64px",
-          }}
-        />
-      </div>
+    <section
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
+      style={{
+        background: "linear-gradient(160deg, #F5F7FB 0%, #EBF0FB 50%, #F5F7FB 100%)",
+      }}
+    >
+      {/* Decorative blobs */}
+      <div
+        className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(10,77,173,0.07) 0%, transparent 70%)",
+          transform: "translate(30%, -30%)",
+        }}
+      />
+      <div
+        className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(10,77,173,0.05) 0%, transparent 70%)",
+          transform: "translate(-30%, 30%)",
+        }}
+      />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
-        {/* Live seat badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-8 px-4 py-2 rounded-full flex items-center gap-2.5 border border-white/10"
-          style={{ backgroundColor: "hsl(222 47% 11% / 0.8)", backdropFilter: "blur(12px)" }}
-        >
-          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" style={{ boxShadow: "0 0 8px #22c55e" }} />
-          <span className="text-sm font-medium text-white/90">36 / 120 Seats Available</span>
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
+        {/* Status badge */}
+        <motion.div {...fadeUp(0.1)} className="inline-flex items-center gap-2.5 mb-8">
+          <div
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border"
+            style={{
+              backgroundColor: "#EBF2FF",
+              borderColor: "#BFDBFE",
+              color: "#0A4DAD",
+            }}
+          >
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse inline-block" />
+            36 / 120 Seats Available Today
+          </div>
         </motion.div>
 
         {/* Headline */}
-        <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-tight">
-          {words.map((word, i) => (
-            <motion.span
-              key={i}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 + i * 0.08 }}
-              className={`inline-block mr-3 mb-1 ${
-                word === "Premium"
-                  ? "text-primary drop-shadow-[0_0_16px_rgba(59,130,246,0.6)]"
-                  : ""
-              }`}
-            >
-              {word}
-            </motion.span>
-          ))}
-        </h1>
-
-        {/* Sub text */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
-          className="text-base sm:text-lg md:text-xl text-white/50 max-w-xl mx-auto mb-10 tracking-wide"
+        <motion.h1
+          {...fadeUp(0.2)}
+          className="text-4xl sm:text-5xl md:text-[64px] font-extrabold leading-[1.1] tracking-tight mb-6"
+          style={{ color: "#062B63" }}
         >
-          AC &bull; WiFi &bull; Silent Environment &bull; 120 Seats &bull; Open 24/7
+          Your Premium
+          <span
+            className="block"
+            style={{
+              backgroundImage: "linear-gradient(135deg, #062B63 0%, #0A4DAD 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            Study Space
+          </span>
+          in Bilaspur
+        </motion.h1>
+
+        {/* Sub */}
+        <motion.p
+          {...fadeUp(0.3)}
+          className="text-base sm:text-lg md:text-xl max-w-xl mx-auto mb-10 leading-relaxed"
+          style={{ color: "#6B7280" }}
+        >
+          AC &bull; High-Speed WiFi &bull; Silent Environment &bull; 120 Seats &bull; Open 24/7
         </motion.p>
 
-        {/* CTA Buttons */}
+        {/* CTA buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.1 }}
-          className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
+          {...fadeUp(0.4)}
+          className="flex flex-col sm:flex-row gap-4 items-center justify-center"
         >
           <a
             href="#seats"
-            className="px-8 py-4 bg-primary text-white font-semibold rounded-xl text-center transition-all duration-200 hover:bg-primary/90"
-            style={{ boxShadow: "0 0 24px hsl(217 91% 60% / 0.4)" }}
+            className="flex items-center gap-2 px-7 py-4 rounded-2xl text-sm font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-95 w-full sm:w-auto justify-center"
+            style={{
+              backgroundColor: "#0A4DAD",
+              boxShadow: "0 4px 14px rgba(10,77,173,0.35)",
+            }}
           >
             Check Seat Availability
+            <ArrowRight className="w-4 h-4" />
           </a>
           <a
             href="#pricing"
-            className="px-8 py-4 text-white font-semibold rounded-xl text-center transition-colors duration-200 hover:border-white/30 border border-white/10"
-            style={{ backgroundColor: "hsl(255 255% 255% / 0.05)" }}
+            className="flex items-center gap-2 px-7 py-4 rounded-2xl text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95 border w-full sm:w-auto justify-center"
+            style={{
+              color: "#062B63",
+              borderColor: "#CBD5E1",
+              backgroundColor: "#fff",
+              boxShadow: "0 1px 3px rgba(6,43,99,0.08)",
+            }}
           >
-            View Plans
+            View Pricing Plans
           </a>
+        </motion.div>
+
+        {/* Trust badges */}
+        <motion.div
+          {...fadeUp(0.5)}
+          className="mt-14 flex flex-wrap items-center justify-center gap-6 sm:gap-10"
+        >
+          {[
+            { num: "120", label: "Total Seats" },
+            { num: "24/7", label: "Open Always" },
+            { num: "500+", label: "Students Served" },
+            { num: "4.9★", label: "Avg Rating" },
+          ].map((b) => (
+            <div key={b.label} className="flex flex-col items-center">
+              <span className="text-2xl font-bold" style={{ color: "#0A4DAD" }}>{b.num}</span>
+              <span className="text-xs mt-0.5" style={{ color: "#9CA3AF" }}>{b.label}</span>
+            </div>
+          ))}
         </motion.div>
       </div>
 
@@ -96,14 +131,15 @@ export default function Hero() {
         href="#features"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/30 hover:text-white/60 transition-colors"
+        transition={{ delay: 1.5 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 transition-opacity hover:opacity-70"
+        style={{ color: "#9CA3AF" }}
       >
         <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
         >
-          <ChevronDown className="w-7 h-7" />
+          <ChevronDown className="w-6 h-6" />
         </motion.div>
       </motion.a>
     </section>
