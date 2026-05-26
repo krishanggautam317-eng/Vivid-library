@@ -12,7 +12,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 
 function App() {
   return (
-    <div className="min-h-screen bg-background text-foreground" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#F5F7FB", color: "#062B63" }}>
       <Navbar />
       <Hero />
       <Features />
