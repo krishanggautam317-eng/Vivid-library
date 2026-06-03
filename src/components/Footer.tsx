@@ -127,14 +127,14 @@ export default function Footer() {
 
         {/* Developer credit */}
         <div className="pt-4 text-center">
-          <p className="text-xs" style={{ color: "rgba(255,255,255,0.25)" }}>
+          <p className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.55)" }}>
             Demo website created by{" "}
-            <span style={{ color: "rgba(255,255,255,0.5)", fontWeight: 600 }}>Krishang Gautam</span>
+            <span style={{ color: "#fff", fontWeight: 700 }}>Krishang Gautam</span>
             {" "}·{" "}
             <a
               href="tel:+919301776746"
               className="transition-colors hover:text-white"
-              style={{ color: "rgba(255,255,255,0.35)" }}
+              style={{ color: "rgba(255,255,255,0.7)", fontWeight: 600 }}
             >
               +91 9301776746
             </a>
