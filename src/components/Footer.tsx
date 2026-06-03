@@ -124,6 +124,22 @@ export default function Footer() {
             <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
           </div>
         </div>
+
+        {/* Developer credit */}
+        <div className="pt-4 text-center">
+          <p className="text-xs" style={{ color: "rgba(255,255,255,0.25)" }}>
+            Demo website created by{" "}
+            <span style={{ color: "rgba(255,255,255,0.5)", fontWeight: 600 }}>Krishang Gautam</span>
+            {" "}·{" "}
+            <a
+              href="tel:+919301776746"
+              className="transition-colors hover:text-white"
+              style={{ color: "rgba(255,255,255,0.35)" }}
+            >
+              +91 9301776746
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );
